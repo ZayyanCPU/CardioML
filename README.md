@@ -1,206 +1,299 @@
-# Heart Disease Prediction - Machine Learning Project
+<div align="center">
 
-## 📋 Project Overview
+# 🫀 CardioML
 
-This project implements a comprehensive machine learning analysis for heart disease prediction using various classification algorithms. The goal is to predict heart disease outcomes based on clinical and laboratory parameters.
+### Predictive Heart Disease Classification Using Machine Learning
 
-**Developer:** Zayyan  
-**Project Type:** Machine Learning Classification  
-**Target Variable:** Heart Disease Outcome (Binary Classification)
+[![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)](https://jupyter.org)
+[![Pandas](https://img.shields.io/badge/Pandas-2.x-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
+[![NumPy](https://img.shields.io/badge/NumPy-1.x-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
+[![scikit learn](https://img.shields.io/badge/scikit_learn-1.x-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.x-11557c?style=for-the-badge)](https://matplotlib.org)
+[![Seaborn](https://img.shields.io/badge/Seaborn-0.x-9ADCFF?style=for-the-badge)](https://seaborn.pydata.org)
 
-## 🎯 Project Objectives
+*A comprehensive machine learning analysis comparing six classification algorithms for heart disease prediction, achieving **86.05% test accuracy** with Logistic Regression.*
 
-- Perform exploratory data analysis on heart disease dataset
-- Implement and compare multiple machine learning algorithms
-- Identify the most important features for heart disease prediction
-- Evaluate model performance using accuracy and AUC metrics
-- Determine the best performing model for clinical application
-
-## 📊 Dataset Information
-
-**Dataset:** Heart Disease.csv  
-**Source:** Provided by university instructor for academic purposes  
-**Size:** 1,177 patients with 51 features  
-**Target Variable:** `outcome (Target)` - Binary classification (0: No heart disease, 1: Heart disease)
-**Note:** This dataset is not owned by the developer and was provided by the university teacher for this academic project.
-
-### Key Features Analyzed:
-- **Demographics:** Age, Gender, BMI
-- **Medical Conditions:** Hypertension, Diabetes, Depression, COPD, etc.
-- **Vital Signs:** Heart rate, Blood pressure, Temperature, SP O2
-- **Laboratory Values:** Blood counts, Electrolytes, Enzymes, etc.
-
-## 🛠️ Technologies Used
-
-- **Python 3.x**
-- **Libraries:**
-  - `pandas` - Data manipulation and analysis
-  - `numpy` - Numerical computations
-  - `matplotlib` & `seaborn` - Data visualization
-  - `scikit-learn` - Machine learning algorithms
-  - `GridSearchCV` - Hyperparameter tuning
-
-## 📓 Notebook Structure (`code.ipynb`)
-
-The analysis is organized into logical sections within the Jupyter notebook:
-
-### **Section 1: Setup & Data Loading**
-- **Cell 0:** Project title and developer information
-- **Cell 1-2:** Library imports and data loading
-- **Cell 4:** Initial data exploration and statistics
-
-### **Section 2: Exploratory Data Analysis**
-- **Cell 5-6:** Data visualization and feature distribution analysis
-- **Cell 7-8:** Correlation analysis and heatmap generation
-
-### **Section 3: Feature Engineering**
-- **Cell 9-10:** Feature selection based on correlation with target variable
-
-### **Section 4: Model Implementation**
-- **Cell 11-12:** Logistic Regression with hyperparameter tuning
-- **Cell 13-14:** Naive Bayes Classifier implementation
-- **Cell 15-16:** Decision Tree with feature importance analysis
-- **Cell 17-18:** Random Forest with comprehensive parameter optimization
-- **Cell 19-20:** K-Nearest Neighbors classification
-- **Cell 21-22:** Support Vector Machine with polynomial kernel
-
-### **Section 5: Results & Comparison**
-- **Cell 23-24:** Comprehensive model comparison and visualization
-- **Cell 25-26:** Final analysis and conclusions
-
-## 🔬 Methodology
-
-### 1. Data Preprocessing
-- **Feature Selection:** Selected 9 most correlated features (>0.125 correlation with target)
-- **Missing Value Handling:** Used SimpleImputer with mean strategy
-- **Data Scaling:** Applied StandardScaler for normalization
-- **Train/Validation/Test Split:** 60%/20%/20% split
-
-### 2. Feature Engineering
-**Selected Features:**
-- Heart rate
-- RDW (Red Cell Distribution Width)
-- Leucocyte count
-- PT (Prothrombin Time)
-- INR (International Normalized Ratio)
-- Urea nitrogen
-- Blood potassium
-- Anion gap
-- Lactic acid
-
-### 3. Model Implementation
-
-Six classification algorithms were implemented and compared:
-
-| Algorithm | Best Parameters | CV Score |
-|-----------|----------------|----------|
-| **Logistic Regression** | C=0.1, solver='lbfgs', max_iter=100 | 84.78% |
-| **Naive Bayes** | var_smoothing=1e-09 | 80.50% |
-| **Decision Tree** | criterion='entropy', max_depth=5 | 84.79% |
-| **Random Forest** | n_estimators=50, max_depth=5 | 85.57% |
-| **K-Nearest Neighbors** | n_neighbors=9, metric='euclidean' | 84.39% |
-| **Support Vector Machine** | C=0.1, kernel='poly', gamma='scale' | 85.17% |
-
-## 📈 Results & Performance
-
-### Model Performance Comparison
-
-| Model | Test Accuracy | Test AUC | Validation Accuracy | Validation AUC |
-|-------|---------------|----------|-------------------|----------------|
-| **Logistic Regression** | **86.05%** | **84.51%** | 89.53% | 80.13% |
-| Naive Bayes | 83.72% | 79.14% | 86.05% | 82.89% |
-| Decision Tree | 77.91% | 42.36% | 86.05% | 61.78% |
-| Random Forest | 80.23% | 80.82% | 87.21% | 78.82% |
-| KNN | 82.56% | 64.70% | 88.37% | 74.08% |
-| SVM | 84.88% | 81.24% | 90.70% | 81.97% |
-
-### 🏆 Best Performing Model
-
-**Logistic Regression** emerged as the best model with:
-- **Test Accuracy:** 86.05%
-- **Test AUC:** 84.51%
-- **Validation Accuracy:** 89.53%
-
-### Feature Importance Analysis
-
-**Top 5 Most Important Features:**
-1. **Anion gap** (24.45%) - Most critical predictor
-2. **Urea nitrogen** (11.62%) - Kidney function indicator
-3. **Leucocyte** (11.24%) - White blood cell count
-4. **INR** (11.15%) - Blood clotting indicator
-5. **PT** (9.66%) - Prothrombin time
-
-## 🔍 Key Findings
-
-### 1. Model Performance
-- **Logistic Regression** showed the best balance of accuracy and AUC
-- **Decision Tree** suffered from overfitting (high train accuracy, low test AUC)
-- **Random Forest** provided good feature importance insights
-
-### 2. Clinical Insights
-- **Anion gap** is the strongest predictor of heart disease
-- **Blood chemistry markers** (urea, leucocyte, INR) are highly predictive
-- **Vital signs** (heart rate) contribute moderately to prediction
-
-### 3. Overfitting Analysis
-- **Decision Tree** showed significant overfitting (94.26% train AUC vs 42.36% test AUC)
-- **Logistic Regression** demonstrated the most stable performance across datasets
-
-## 🚀 Usage Instructions
-
-### Prerequisites
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-```
-
-### Running the Analysis
-1. Ensure `Heart Disease.csv` is in the project directory
-2. Open `code.ipynb` in Jupyter Notebook or JupyterLab
-3. Run all cells sequentially for complete analysis
-
-### Key Code Sections
-- **Data Loading & EDA:** Cells 1-8
-- **Feature Selection:** Cell 10
-- **Model Training:** Cells 12-22
-- **Results Comparison:** Cell 24
-
-## 📊 Visualizations Generated
-
-The analysis produces several visualizations:
-- **Feature Distribution Histograms** - Understanding data patterns
-- **Correlation Heatmap** - Feature relationships
-- **Target Distribution** - Class balance analysis
-- **Model Performance Comparisons** - Accuracy and AUC comparisons
-- **Overfitting Analysis** - Train vs Test performance gaps
-
-## 🔬 Clinical Applications
-
-This model can be used for:
-- **Early heart disease screening** in clinical settings
-- **Risk stratification** of patients
-- **Resource allocation** in healthcare systems
-- **Clinical decision support** tools
-
-## 📝 Limitations
-
-1. **Dataset Size:** Limited to 1,177 patients
-2. **Feature Selection:** Only 9 features used from 51 available
-3. **Cross-validation:** 5-fold CV used, could benefit from more folds
-4. **External Validation:** No external dataset validation
-
-## 🔮 Future Improvements
-
-1. **Feature Engineering:** Create interaction terms and polynomial features
-2. **Ensemble Methods:** Combine multiple models for better performance
-3. **Deep Learning:** Implement neural networks for complex patterns
-4. **External Validation:** Test on independent datasets
-5. **Clinical Validation:** Real-world clinical trial validation
-
-## 📞 Contact
-
-**Developer:** Zayyan  
-**Project:** Heart Disease Prediction ML Analysis
+[Key Features](#-key-features) • [Results](#-results--insights) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Skills](#-skills-demonstrated)
 
 ---
 
-*This project demonstrates comprehensive machine learning workflow from data exploration to model deployment for clinical applications.*
+</div>
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Analysis Pipeline](#-analysis-pipeline)
+- [Results & Insights](#-results--insights)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Skills Demonstrated](#-skills-demonstrated)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## 🎯 Overview
+
+**CardioML** is a machine learning project focused on predicting heart disease outcomes using clinical and laboratory parameters. This project demonstrates a complete data science workflow from exploratory data analysis through model deployment, comparing multiple classification algorithms to identify the optimal predictive model.
+
+| Attribute | Details |
+|-----------|---------|
+| **Developer** | Zayyan |
+| **Dataset** | 1,177 patients with 51 clinical features |
+| **Target** | Binary classification (Heart Disease: Yes/No) |
+| **Best Model** | Logistic Regression (86.05% accuracy) |
+| **Techniques** | GridSearchCV, Cross Validation, Feature Engineering |
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|:-------:|-------------|
+| 🔬 | **Comprehensive EDA** — In depth exploratory analysis with 48 feature distributions and correlation heatmaps |
+| 🎯 | **Smart Feature Selection** — Automated selection of 9 high correlation features (>0.125) from 51 available |
+| 🤖 | **Six ML Models** — Logistic Regression, Naive Bayes, Decision Tree, Random Forest, KNN, and SVM |
+| ⚙️ | **Hyperparameter Tuning** — Exhaustive GridSearchCV optimization for each algorithm |
+| 📊 | **Performance Visualization** — Comparative charts for accuracy, AUC, and overfitting analysis |
+| 🏥 | **Clinical Relevance** — Feature importance analysis identifying key biomarkers |
+
+---
+
+## 🛠 Tech Stack
+
+<div align="center">
+
+| Category | Technologies |
+|:--------:|-------------|
+| **Language** | Python 3.x |
+| **Data Processing** | Pandas, NumPy |
+| **Visualization** | Matplotlib, Seaborn |
+| **Machine Learning** | scikit learn (Logistic Regression, Naive Bayes, Decision Tree, Random Forest, KNN, SVM) |
+| **Model Optimization** | GridSearchCV, Cross Validation |
+| **Environment** | Jupyter Notebook |
+
+</div>
+
+---
+
+## 🔄 Analysis Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           CardioML Analysis Pipeline                            │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  📥 DATA LOADING                                                                │
+│  └── Load Heart Disease.csv (1,177 patients × 51 features)                      │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  🔍 EXPLORATORY DATA ANALYSIS                                                   │
+│  ├── Feature distribution histograms                                            │
+│  ├── Target variable analysis                                                   │
+│  └── Correlation matrix heatmap                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  ⚙️ PREPROCESSING                                                               │
+│  ├── SimpleImputer (mean strategy)                                              │
+│  ├── StandardScaler normalization                                               │
+│  └── Train/Validation/Test split (60%/20%/20%)                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  🎯 FEATURE SELECTION                                                           │
+│  └── 9 features selected (correlation > 0.125 with target)                      │
+│      Heart rate, RDW, Leucocyte, PT, INR, Urea nitrogen,                        │
+│      Blood potassium, Anion gap, Lactic acid                                    │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  🤖 MODEL TRAINING (with GridSearchCV)                                          │
+│  ├── Logistic Regression                                                        │
+│  ├── Naive Bayes                                                                │
+│  ├── Decision Tree                                                              │
+│  ├── Random Forest                                                              │
+│  ├── K Nearest Neighbors                                                        │
+│  └── Support Vector Machine                                                     │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  📈 EVALUATION & COMPARISON                                                     │
+│  ├── Accuracy & AUC metrics                                                     │
+│  ├── Overfitting analysis                                                       │
+│  └── Best model selection                                                       │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📈 Results & Insights
+
+### Model Performance Comparison
+
+| Model | Test Accuracy | Test AUC | Validation Accuracy | Validation AUC | CV Score |
+|:------|:-------------:|:--------:|:-------------------:|:--------------:|:--------:|
+| **🏆 Logistic Regression** | **86.05%** | **84.51%** | 89.53% | 80.13% | 84.78% |
+| SVM | 84.88% | 81.24% | 90.70% | 81.97% | 85.17% |
+| Naive Bayes | 83.72% | 79.14% | 86.05% | 82.89% | 80.50% |
+| KNN | 82.56% | 64.70% | 88.37% | 74.08% | 84.39% |
+| Random Forest | 80.23% | 80.82% | 87.21% | 78.82% | 85.57% |
+| Decision Tree | 77.91% | 42.36% | 86.05% | 61.78% | 84.79% |
+
+### 🏆 Best Model: Logistic Regression
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║                    WINNING MODEL METRICS                       ║
+╠═══════════════════════════════════════════════════════════════╣
+║  Model:               Logistic Regression                      ║
+║  Best Parameters:     C=0.1, solver='lbfgs', max_iter=100      ║
+║  ─────────────────────────────────────────────────────────────║
+║  Test Accuracy:       86.05%                                   ║
+║  Test AUC:            84.51%                                   ║
+║  Validation Accuracy: 89.53%                                   ║
+║  CV Score:            84.78%                                   ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+### Feature Importance Analysis
+
+Top predictive biomarkers identified through Decision Tree analysis:
+
+| Rank | Feature | Importance | Clinical Significance |
+|:----:|---------|:----------:|----------------------|
+| 1 | **Anion Gap** | 24.45% | Metabolic status indicator |
+| 2 | **Urea Nitrogen** | 11.62% | Kidney function marker |
+| 3 | **Leucocyte** | 11.24% | White blood cell count |
+| 4 | **INR** | 11.15% | Blood clotting indicator |
+| 5 | **PT** | 9.66% | Prothrombin time |
+
+### Key Findings
+
+- ✅ **Logistic Regression** demonstrated the best balance of accuracy and generalization
+- ⚠️ **Decision Tree** showed significant overfitting (94.26% train AUC vs 42.36% test AUC)
+- 📊 **Anion gap** emerged as the strongest predictor of heart disease
+- 🔬 Blood chemistry markers (urea, leucocyte, INR) are highly predictive
+- 💓 Vital signs contribute moderately to prediction accuracy
+
+### Overfitting Analysis
+
+```
+Model Performance Gap (Train AUC − Test AUC):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Decision Tree:      ████████████████████████████████████████  51.90%  ⚠️ OVERFITTING
+KNN:                ██████████████████████                    22.70%
+Random Forest:      ████████████████                          16.20%
+Logistic Regression:████████                                   8.70%  ✅ STABLE
+Naive Bayes:        ██████                                     6.50%
+SVM:                ██████                                     6.20%
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have Python 3.x installed, then install the required packages:
+
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn jupyter
+```
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ZayyanCPU/CardioML.git
+   cd CardioML
+   ```
+
+2. **Launch Jupyter Notebook**
+   ```bash
+   jupyter notebook CardioML.ipynb
+   ```
+
+3. **Run all cells** sequentially for complete analysis
+
+### Quick Start
+
+```python
+# Load and explore the data
+import pandas as pd
+data = pd.read_csv('Heart Disease.csv')
+print(f"Dataset: {data.shape[0]} patients, {data.shape[1]} features")
+
+# Run the notebook for full analysis
+```
+
+---
+
+## 📁 Project Structure
+
+```
+CardioML/
+│
+├── 📓 CardioML.ipynb        # Main analysis notebook
+├── 📊 Heart Disease.csv     # Dataset (1,177 patients)
+├── 📖 README.md             # Project documentation
+└── 📄 LICENSE               # MIT License
+```
+
+---
+
+## 💼 Skills Demonstrated
+
+| Category | Skills |
+|----------|--------|
+| **Data Science** | Exploratory Data Analysis, Feature Engineering, Statistical Analysis |
+| **Machine Learning** | Classification Algorithms, Hyperparameter Tuning, Model Evaluation |
+| **Python** | Pandas, NumPy, scikit learn, Matplotlib, Seaborn |
+| **Best Practices** | Cross Validation, Train/Val/Test Splits, Overfitting Detection |
+| **Domain Knowledge** | Healthcare Analytics, Clinical Biomarker Interpretation |
+| **Documentation** | Technical Writing, Data Visualization, Results Presentation |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+### 📬 Connect
+
+**Developed by Zayyan**
+
+*Building intelligent healthcare solutions through data science*
+
+⭐ Star this repository if you found it helpful!
+
+---
+
+</div>
