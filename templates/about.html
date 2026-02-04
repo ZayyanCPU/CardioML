@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - CardioML</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,35 +14,185 @@
         }
 
         :root {
-            --primary: #e74c3c;
-            --primary-dark: #c0392b;
-            --secondary: #3498db;
-            --success: #27ae60;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
+            --primary: #ff4757;
+            --primary-dark: #ff3246;
+            --primary-light: #ff6b7a;
+            --secondary: #5f27cd;
+            --accent: #00d2d3;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: #f8f9fa;
             --white: #ffffff;
-            --gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --gradient-primary: linear-gradient(135deg, #ff4757 0%, #ff6b7a 50%, #c44569 100%);
+            --gradient-secondary: linear-gradient(135deg, #5f27cd 0%, #341f97 100%);
+            --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, #ff4757 0px, transparent 50%), 
+                            radial-gradient(at 80% 0%, #5f27cd 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, #00d2d3 0px, transparent 50%),
+                            radial-gradient(at 80% 50%, #ff6b7a 0px, transparent 50%),
+                            radial-gradient(at 0% 100%, #5f27cd 0px, transparent 50%);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Page Load Animation */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-heart {
+            font-size: 4rem;
+            color: var(--primary);
+            animation: heartPulse 1s ease-in-out infinite;
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            animation: loadProgress 1.5s ease-out forwards;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--dark);
             min-height: 100vh;
-            color: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: var(--gradient-dark);
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: var(--gradient-mesh);
+            animation: meshMove 20s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(0, 4%) rotate(0deg); }
+            75% { transform: translate(-2%, 2%) rotate(-1deg); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 19s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 21s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 17s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 23s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 16s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 20s; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
         }
 
         /* Navigation */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
             padding: 1rem 2rem;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(26, 26, 46, 0.95);
+            box-shadow: var(--shadow-md);
         }
 
         .nav-container {
@@ -57,57 +207,126 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--white);
             text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo i {
             font-size: 2rem;
+            color: var(--primary);
             animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.5));
+        }
+
+        .logo-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            10% { transform: scale(1.15); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            40% { transform: scale(1); }
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
             font-weight: 500;
-            transition: color 0.3s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .nav-links a:hover {
-            color: var(--primary);
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: var(--glass);
+        }
+
+        .nav-links a.active {
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
         }
 
         /* Hero Section */
         .hero {
-            padding: 8rem 2rem 3rem;
+            padding: 10rem 2rem 4rem;
             text-align: center;
-            color: white;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge i {
+            color: var(--accent);
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease 0.1s backwards;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
+            font-size: 1.25rem;
+            opacity: 0.8;
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Main Content */
@@ -117,29 +336,66 @@
             padding: 0 2rem 4rem;
         }
 
-        .content-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            padding: 3rem;
-            margin-bottom: 2rem;
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .content-card {
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease backwards;
+        }
+
+        .content-card:nth-child(1) { animation-delay: 0.1s; }
+        .content-card:nth-child(2) { animation-delay: 0.2s; }
+        .content-card:nth-child(3) { animation-delay: 0.3s; }
+        .content-card:nth-child(4) { animation-delay: 0.4s; }
+        .content-card:nth-child(5) { animation-delay: 0.5s; }
+
         .content-card h2 {
-            color: var(--primary);
-            font-size: 1.8rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--white);
+            font-size: 1.6rem;
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
+        .content-card h2 i {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 71, 87, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
         .content-card p {
             line-height: 1.8;
-            color: #555;
+            color: rgba(255, 255, 255, 0.75);
             margin-bottom: 1rem;
         }
 
+        .content-card strong {
+            color: var(--primary);
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -148,28 +404,51 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 15px;
+            background: var(--gradient-primary);
+            padding: 2rem;
+            border-radius: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FFFFFF' fill-opacity='0.1' d='M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,88.5,-0.9C87,14.6,81.4,29.2,73.1,42.2C64.8,55.2,53.7,66.6,40.3,74.4C26.9,82.2,11.1,86.3,-4.8,93.1C-20.7,99.9,-41.4,109.4,-56.3,102.5C-71.2,95.6,-80.3,72.3,-86.1,50.1C-91.9,28,-94.4,7,-91.2,-12.3C-88,-31.6,-79,-49.2,-66,-62.4C-53,-75.6,-36,-84.3,-19.4,-82.6C-2.8,-80.9,13.4,-68.7,27.2,-65.6C41,-62.5,52.3,-68.5,44.7,-76.4Z' transform='translate(100 100)' /%3E%3C/svg%3E");
+            background-size: cover;
         }
 
         .stat-card i {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .stat-card h3 {
-            font-size: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .stat-card p {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.85);
             margin: 0;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
         }
 
+        /* Model Comparison Table */
         .model-comparison {
             width: 100%;
             border-collapse: collapse;
@@ -178,29 +457,44 @@
 
         .model-comparison th,
         .model-comparison td {
-            padding: 1rem;
+            padding: 1rem 1.25rem;
             text-align: left;
-            border-bottom: 1px solid var(--light);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .model-comparison th {
-            background: var(--light);
+            background: rgba(255, 255, 255, 0.05);
             font-weight: 600;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .model-comparison td {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .model-comparison tr {
+            transition: all 0.3s ease;
         }
 
         .model-comparison tr:hover {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .model-comparison .best {
-            background: rgba(39, 174, 96, 0.1);
+            background: rgba(255, 71, 87, 0.15);
         }
 
         .model-comparison .best td {
-            color: var(--success);
+            color: var(--primary);
             font-weight: 600;
         }
 
+        .model-comparison .best:hover {
+            background: rgba(255, 71, 87, 0.2);
+        }
+
+        /* Tech Stack */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
@@ -209,34 +503,188 @@
         }
 
         .tech-badge {
-            background: var(--light);
-            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.85rem 1.5rem;
             border-radius: 50px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: rgba(255, 71, 87, 0.15);
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .tech-badge i {
             color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Methodology List */
+        .methodology-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .methodology-list li {
+            padding: 1rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
+        }
+
+        .methodology-list li:last-child {
+            border-bottom: none;
+        }
+
+        .methodology-list li i {
+            color: var(--success);
+            margin-top: 0.25rem;
+            width: 20px;
+            flex-shrink: 0;
+        }
+
+        .methodology-list li strong {
+            color: var(--white);
+        }
+
+        /* Developer Card */
+        .developer-card {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .developer-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .developer-avatar::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.5;
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+        }
+
+        .developer-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .developer-info p {
+            margin-bottom: 1rem;
+        }
+
+        .developer-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .developer-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .developer-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
         }
 
         /* Footer */
         .footer {
             text-align: center;
-            padding: 2rem;
-            color: rgba(255,255,255,0.8);
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        .footer a {
-            color: white;
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-logo i {
+            color: var(--primary);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
         }
 
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .content-card {
@@ -246,33 +694,99 @@
             .nav-links {
                 display: none;
             }
+
+            .developer-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .developer-info {
+                text-align: center;
+            }
+
+            .developer-links {
+                justify-content: center;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <i class="fas fa-heartbeat loader-heart"></i>
+        <div class="loader-text">CARDIOML</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
                 <i class="fas fa-heartbeat"></i>
-                CardioML
+                <span class="logo-text">CardioML</span>
             </a>
             <div class="nav-links">
                 <a href="/"><i class="fas fa-home"></i> Home</a>
-                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+                <a href="/about" class="active"><i class="fas fa-info-circle"></i> About</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1><i class="fas fa-info-circle"></i> About CardioML</h1>
-        <p>A machine learning project for heart disease prediction</p>
+        <div class="hero-badge">
+            <i class="fas fa-flask"></i>
+            <span>Machine Learning Project</span>
+        </div>
+        <h1>About <span class="highlight">CardioML</span></h1>
+        <p>A comprehensive machine learning project demonstrating end-to-end data science workflow for heart disease prediction</p>
     </section>
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="content-card">
+        <div class="content-card glass-card">
             <h2><i class="fas fa-bullseye"></i> Project Overview</h2>
             <p>
                 <strong>CardioML</strong> is a machine learning project focused on predicting heart disease outcomes 
@@ -284,7 +798,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <i class="fas fa-users"></i>
-                    <h3>1,177</h3>
+                    <h3 data-count="1177">0</h3>
                     <p>Patients</p>
                 </div>
                 <div class="stat-card">
@@ -294,18 +808,18 @@
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-database"></i>
-                    <h3>51</h3>
+                    <h3 data-count="51">0</h3>
                     <p>Clinical Features</p>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-brain"></i>
-                    <h3>6</h3>
+                    <h3 data-count="6">0</h3>
                     <p>Models Compared</p>
                 </div>
             </div>
         </div>
 
-        <div class="content-card">
+        <div class="content-card glass-card">
             <h2><i class="fas fa-flask"></i> Model Comparison</h2>
             <p>
                 Six different classification algorithms were trained and evaluated to find the best 
@@ -355,22 +869,22 @@
             </table>
         </div>
 
-        <div class="content-card">
+        <div class="content-card glass-card">
             <h2><i class="fas fa-cogs"></i> Methodology</h2>
             <p>
                 The project follows a rigorous machine learning pipeline:
             </p>
-            <ul style="margin-left: 1.5rem; line-height: 2;">
-                <li><strong>Data Preprocessing:</strong> Handling missing values with SimpleImputer</li>
-                <li><strong>Feature Selection:</strong> Using correlation analysis (threshold > 0.129)</li>
-                <li><strong>Feature Scaling:</strong> StandardScaler normalization</li>
-                <li><strong>Model Training:</strong> 60-20-20 train-validation-test split</li>
-                <li><strong>Hyperparameter Tuning:</strong> GridSearchCV with 5-fold cross-validation</li>
-                <li><strong>Evaluation:</strong> Accuracy, AUC-ROC metrics</li>
+            <ul class="methodology-list">
+                <li><i class="fas fa-check-circle"></i> <span><strong>Data Preprocessing:</strong> Handling missing values with SimpleImputer</span></li>
+                <li><i class="fas fa-check-circle"></i> <span><strong>Feature Selection:</strong> Using correlation analysis (threshold > 0.129)</span></li>
+                <li><i class="fas fa-check-circle"></i> <span><strong>Feature Scaling:</strong> StandardScaler normalization</span></li>
+                <li><i class="fas fa-check-circle"></i> <span><strong>Model Training:</strong> 60-20-20 train-validation-test split</span></li>
+                <li><i class="fas fa-check-circle"></i> <span><strong>Hyperparameter Tuning:</strong> GridSearchCV with 5-fold cross-validation</span></li>
+                <li><i class="fas fa-check-circle"></i> <span><strong>Evaluation:</strong> Accuracy, AUC-ROC metrics</span></li>
             </ul>
         </div>
 
-        <div class="content-card">
+        <div class="content-card glass-card">
             <h2><i class="fas fa-code"></i> Technology Stack</h2>
             <div class="tech-stack">
                 <div class="tech-badge"><i class="fab fa-python"></i> Python</div>
@@ -384,19 +898,100 @@
             </div>
         </div>
 
-        <div class="content-card">
+        <div class="content-card glass-card">
             <h2><i class="fas fa-user"></i> Developer</h2>
-            <p>
-                This project was developed by <strong>Zayyan</strong> as a Machine Learning Lab Project, 
-                demonstrating practical application of data science techniques for healthcare analytics.
-            </p>
+            <div class="developer-card">
+                <div class="developer-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="developer-info">
+                    <h3>Zayyan</h3>
+                    <p>
+                        This project was developed as a Machine Learning Lab Project, 
+                        demonstrating practical application of data science techniques for healthcare analytics.
+                    </p>
+                    <div class="developer-links">
+                        <a href="https://github.com" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:contact@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p>🫀 CardioML - Developed by <strong>Zayyan</strong></p>
-        <p>Powered by Machine Learning</p>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-heartbeat"></i>
+                CardioML
+            </div>
+            <p>A Machine Learning project demonstrating end-to-end data science workflow for healthcare analytics</p>
+            <p><strong>Developed by Zayyan</strong></p>
+            <div class="footer-links">
+                <a href="https://github.com" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:contact@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
     </footer>
+
+    <script>
+        // Page Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 1800);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animated counters
+        const animateCounters = () => {
+            const counters = document.querySelectorAll('[data-count]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+
+                updateCounter();
+            });
+        };
+
+        // Intersection Observer for counters
+        const statsGrid = document.querySelector('.stats-grid');
+        if (statsGrid) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(statsGrid);
+        }
+    </script>
 </body>
 </html>

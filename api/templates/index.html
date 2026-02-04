@@ -5,128 +5,1219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CardioML - Heart Disease Prediction</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #e74c3c; --primary-dark: #c0392b; --secondary: #3498db;
-            --success: #27ae60; --dark: #2c3e50; --light: #ecf0f1; --white: #ffffff;
-            --gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1); --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: var(--dark); }
-        .navbar { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: var(--shadow); }
-        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
-        .logo i { font-size: 2rem; animation: heartbeat 1.5s infinite; }
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
-        .hero { padding: 8rem 2rem 3rem; text-align: center; color: white; }
-        .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
-        .main-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; display: grid; grid-template-columns: 1fr 400px; gap: 2rem; }
-        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
-        .form-card { background: white; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; }
-        .form-header { background: var(--gradient); color: white; padding: 1.5rem 2rem; }
-        .form-header h2 { font-size: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .form-body { padding: 2rem; }
-        .form-section { margin-bottom: 2rem; }
-        .section-title { font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--light); display: flex; align-items: center; gap: 0.5rem; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-        .form-group { position: relative; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--dark); margin-bottom: 0.4rem; }
-        .form-group .unit { font-size: 0.75rem; color: #888; font-weight: 400; }
-        .form-group input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--light); border-radius: 10px; font-size: 1rem; font-family: inherit; transition: all 0.3s; background: white; }
-        .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1); }
-        .form-group input:hover { border-color: #bdc3c7; }
-        .submit-btn { width: 100%; padding: 1rem 2rem; background: var(--gradient); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3); }
-        .submit-btn.loading { pointer-events: none; opacity: 0.8; }
-        .submit-btn .spinner { display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        .submit-btn.loading .spinner { display: block; }
-        .submit-btn.loading .btn-text { display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .results-panel { position: sticky; top: 100px; height: fit-content; }
-        .results-card { background: white; border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; }
-        .results-header { background: var(--dark); color: white; padding: 1.5rem 2rem; }
-        .results-header h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 0.75rem; }
-        .results-body { padding: 2rem; }
-        .results-placeholder { text-align: center; color: #888; padding: 3rem 1rem; }
-        .results-placeholder i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
-        .result-display { display: none; }
-        .result-display.active { display: block; }
-        .risk-indicator { text-align: center; padding: 2rem; border-radius: 15px; margin-bottom: 1.5rem; }
-        .risk-indicator.low-risk { background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; }
-        .risk-indicator.high-risk { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; }
-        .risk-indicator i { font-size: 3rem; margin-bottom: 1rem; }
-        .risk-indicator h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .probability-bars { margin-top: 1.5rem; }
-        .probability-item { margin-bottom: 1rem; }
-        .probability-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 500; }
-        .probability-bar { height: 12px; background: var(--light); border-radius: 6px; overflow: hidden; }
-        .probability-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
-        .probability-fill.healthy { background: linear-gradient(90deg, #27ae60, #2ecc71); }
-        .probability-fill.disease { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-        .info-card { background: white; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 1.5rem; margin-top: 1.5rem; }
-        .info-card h3 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; }
-        .info-card ul { list-style: none; }
-        .info-card li { padding: 0.4rem 0; display: flex; align-items: center; gap: 0.75rem; color: #555; font-size: 0.9rem; }
-        .info-card li i { color: var(--primary); width: 16px; }
-        .footer { text-align: center; padding: 2rem; color: rgba(255,255,255,0.8); }
-        .disclaimer { background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.8); }
-        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .form-grid { grid-template-columns: 1fr; } .nav-links { display: none; } .main-container { padding: 0 1rem 2rem; } }
+
+        :root {
+            --primary: #ff4757;
+            --primary-dark: #ff3246;
+            --primary-light: #ff6b7a;
+            --secondary: #5f27cd;
+            --accent: #00d2d3;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff4757;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --gradient-primary: linear-gradient(135deg, #ff4757 0%, #ff6b7a 50%, #c44569 100%);
+            --gradient-secondary: linear-gradient(135deg, #5f27cd 0%, #341f97 100%);
+            --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, #ff4757 0px, transparent 50%), 
+                            radial-gradient(at 80% 0%, #5f27cd 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, #00d2d3 0px, transparent 50%),
+                            radial-gradient(at 80% 50%, #ff6b7a 0px, transparent 50%),
+                            radial-gradient(at 0% 100%, #5f27cd 0px, transparent 50%);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 40px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 60px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Page Load Animation */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-heart {
+            font-size: 4rem;
+            color: var(--primary);
+            animation: heartPulse 1s ease-in-out infinite;
+        }
+
+        .loader-text {
+            margin-top: 1rem;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            animation: loadProgress 1.5s ease-out forwards;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            min-height: 100vh;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: var(--gradient-dark);
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: var(--gradient-mesh);
+            animation: meshMove 20s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(0, 4%) rotate(0deg); }
+            75% { transform: translate(-2%, 2%) rotate(-1deg); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 19s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 21s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 17s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 23s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 16s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 20s; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(26, 26, 46, 0.95);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 71, 87, 0.5));
+        }
+
+        .logo-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.15); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: var(--glass);
+        }
+
+        .nav-links a.active {
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge i {
+            color: var(--success);
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease 0.1s backwards;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s backwards;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Glass Card Style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Form Card */
+        .form-card {
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .form-header {
+            background: var(--gradient-primary);
+            padding: 1.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .form-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 71, 87, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .form-group .unit {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 400;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select option {
+            background: var(--dark);
+            color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 71, 87, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.15);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group:focus-within label {
+            color: var(--primary);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 71, 87, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+            background: var(--darker);
+        }
+
+        .submit-btn .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .submit-btn.loading .spinner {
+            display: block;
+        }
+
+        .submit-btn.loading .btn-text {
+            display: none;
+        }
+
+        .submit-btn.loading .btn-loading-text {
+            display: inline;
+        }
+
+        .btn-loading-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Panel */
+        .results-panel {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            animation: fadeInUp 0.8s ease 0.5s backwards;
+        }
+
+        .results-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .results-header {
+            background: var(--gradient-secondary);
+            padding: 1.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .results-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .results-body {
+            padding: 2rem;
+        }
+
+        .results-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 3rem 1rem;
+        }
+
+        .results-placeholder .placeholder-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .results-placeholder .placeholder-icon i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 71, 87, 0); }
+        }
+
+        .results-placeholder p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Result Display */
+        .result-display {
+            display: none;
+        }
+
+        .result-display.active {
+            display: block;
+            animation: resultReveal 0.6s ease;
+        }
+
+        @keyframes resultReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .risk-indicator {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-indicator::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FFFFFF' fill-opacity='0.05' d='M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,88.5,-0.9C87,14.6,81.4,29.2,73.1,42.2C64.8,55.2,53.7,66.6,40.3,74.4C26.9,82.2,11.1,86.3,-4.8,93.1C-20.7,99.9,-41.4,109.4,-56.3,102.5C-71.2,95.6,-80.3,72.3,-86.1,50.1C-91.9,28,-94.4,7,-91.2,-12.3C-88,-31.6,-79,-49.2,-66,-62.4C-53,-75.6,-36,-84.3,-19.4,-82.6C-2.8,-80.9,13.4,-68.7,27.2,-65.6C41,-62.5,52.3,-68.5,44.7,-76.4Z' transform='translate(100 100)' /%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.5;
+        }
+
+        .risk-indicator.low-risk {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+        }
+
+        .risk-indicator.high-risk {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+            color: white;
+            animation: riskPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes riskPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+            50% { box-shadow: 0 0 30px 10px rgba(255, 71, 87, 0.2); }
+        }
+
+        .risk-indicator .risk-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .risk-indicator .risk-icon i {
+            font-size: 2rem;
+        }
+
+        .risk-indicator h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .risk-indicator p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-size: 0.9rem;
+        }
+
+        .probability-bars {
+            margin-top: 1.5rem;
+        }
+
+        .probability-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .probability-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .probability-label span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .probability-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .probability-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .probability-fill.healthy {
+            background: linear-gradient(90deg, #00b894, #00cec9);
+        }
+
+        .probability-fill.disease {
+            background: linear-gradient(90deg, #ff4757, #ff6b7a);
+        }
+
+        /* Analysis Loading Animation */
+        .analysis-loader {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .analysis-loader.active {
+            display: block;
+        }
+
+        .analysis-loader .loader-ring {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .analysis-loader .loader-ring::before,
+        .analysis-loader .loader-ring::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+
+        .analysis-loader .loader-ring::before {
+            border-top-color: var(--primary);
+            animation: spinRing 1s linear infinite;
+        }
+
+        .analysis-loader .loader-ring::after {
+            border-bottom-color: var(--secondary);
+            animation: spinRing 1s linear infinite reverse;
+            inset: 8px;
+        }
+
+        @keyframes spinRing {
+            to { transform: rotate(360deg); }
+        }
+
+        .analysis-loader .loader-steps {
+            list-style: none;
+            text-align: left;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .analysis-loader .loader-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-loader .loader-step.active {
+            color: white;
+        }
+
+        .analysis-loader .loader-step.completed {
+            color: var(--success);
+        }
+
+        .analysis-loader .loader-step i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Info Cards */
+        .info-card {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--white);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .info-card h3 i {
+            color: var(--primary);
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .info-card li i {
+            color: var(--success);
+            width: 16px;
+        }
+
+        /* Tech Badges */
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .disclaimer i {
+            color: var(--primary);
+            margin-top: 0.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-logo i {
+            color: var(--primary);
+        }
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .hero-stat-value {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-container {
+                padding: 0 1rem 2rem;
+            }
+
+            .form-body {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <i class="fas fa-heartbeat loader-heart"></i>
+        <div class="loader-text">CARDIOML</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="/" class="logo"><i class="fas fa-heartbeat"></i> CardioML</a>
+            <a href="/" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span class="logo-text">CardioML</span>
+            </a>
             <div class="nav-links">
-                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/" class="active"><i class="fas fa-home"></i> Home</a>
                 <a href="/about"><i class="fas fa-info-circle"></i> About</a>
             </div>
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="hero">
-        <h1><i class="fas fa-heartbeat"></i> Heart Disease Prediction</h1>
-        <p>Advanced machine learning model with 86% accuracy to assess cardiovascular disease risk</p>
+        <div class="hero-badge">
+            <i class="fas fa-check-circle"></i>
+            <span>ML-Powered Diagnostics</span>
+        </div>
+        <h1>
+            Predict <span class="highlight">Heart Disease</span><br>
+            With Machine Learning
+        </h1>
+        <p>Advanced classification model trained on 1,177 patients achieving 86% accuracy in cardiovascular risk assessment</p>
+        
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="86">0</div>
+                <div class="hero-stat-label">Accuracy %</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="1177">0</div>
+                <div class="hero-stat-label">Patients</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="51">0</div>
+                <div class="hero-stat-label">Features</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="6">0</div>
+                <div class="hero-stat-label">Models Tested</div>
+            </div>
+        </div>
     </section>
 
+    <!-- Main Content -->
     <main class="main-container">
-        <div class="form-card">
+        <!-- Input Form -->
+        <div class="form-card glass-card">
             <div class="form-header">
                 <h2><i class="fas fa-clipboard-list"></i> Patient Information</h2>
             </div>
             <div class="form-body">
                 <form id="predictionForm">
+                    <!-- Demographics Section -->
                     <div class="form-section">
-                        <h3 class="section-title"><i class="fas fa-heartbeat"></i> Vital Signs</h3>
+                        <h3 class="section-title"><i class="fas fa-user"></i> Demographics & Vitals</h3>
                         <div class="form-grid">
                             {% for feature in features %}
-                                {% if feature.name == 'heart rate' %}
+                                {% if feature.name in ['age', 'gender', 'BMI', 'heart rate', 'Systolic blood pressure', 'Diastolic blood pressure', 'Respiratory rate', 'temperature', 'SP O2'] %}
                                 <div class="form-group">
                                     <label>{{ feature.label }} {% if feature.unit %}<span class="unit">({{ feature.unit }})</span>{% endif %}</label>
-                                    <input type="number" name="{{ feature.name }}" id="{{ feature.name }}" value="{{ feature.default }}"
+                                    {% if feature.type == 'select' %}
+                                    <select name="{{ feature.name }}" id="{{ feature.name }}">
+                                        {% for value, label in feature.options %}
+                                        <option value="{{ value }}" {% if value == feature.default %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% else %}
+                                    <input type="number" 
+                                           name="{{ feature.name }}" 
+                                           id="{{ feature.name }}"
+                                           value="{{ feature.default }}"
                                            {% if feature.min is defined %}min="{{ feature.min }}"{% endif %}
                                            {% if feature.max is defined %}max="{{ feature.max }}"{% endif %}
                                            {% if feature.step is defined %}step="{{ feature.step }}"{% else %}step="any"{% endif %}>
+                                    {% endif %}
                                 </div>
                                 {% endif %}
                             {% endfor %}
                         </div>
                     </div>
 
+                    <!-- Medical History Section -->
+                    <div class="form-section">
+                        <h3 class="section-title"><i class="fas fa-notes-medical"></i> Medical History</h3>
+                        <div class="form-grid">
+                            {% for feature in features %}
+                                {% if feature.name in ['hypertensive', 'atrialfibrillation', 'CHD with no MI', 'diabetes', 'deficiencyanemias', 'depression', 'Hyperlipemia', 'Renal failure', 'COPD'] %}
+                                <div class="form-group">
+                                    <label>{{ feature.label }}</label>
+                                    {% if feature.type == 'select' %}
+                                    <select name="{{ feature.name }}" id="{{ feature.name }}">
+                                        {% for value, label in feature.options %}
+                                        <option value="{{ value }}" {% if value == feature.default %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Blood Tests Section -->
                     <div class="form-section">
                         <h3 class="section-title"><i class="fas fa-vial"></i> Blood Tests</h3>
                         <div class="form-grid">
                             {% for feature in features %}
-                                {% if feature.name in ['RDW', 'Leucocyte', 'PT', 'INR'] %}
+                                {% if feature.name in ['hematocrit', 'RBC', 'MCH', 'MCHC', 'MCV', 'RDW', 'Leucocyte', 'Platelets', 'Neutrophils', 'Basophils', 'Lymphocyte', 'PT', 'INR'] %}
                                 <div class="form-group">
                                     <label>{{ feature.label }} {% if feature.unit %}<span class="unit">({{ feature.unit }})</span>{% endif %}</label>
-                                    <input type="number" name="{{ feature.name }}" id="{{ feature.name }}" value="{{ feature.default }}"
+                                    <input type="number" 
+                                           name="{{ feature.name }}" 
+                                           id="{{ feature.name }}"
+                                           value="{{ feature.default }}"
                                            {% if feature.min is defined %}min="{{ feature.min }}"{% endif %}
                                            {% if feature.max is defined %}max="{{ feature.max }}"{% endif %}
                                            {% if feature.step is defined %}step="{{ feature.step }}"{% else %}step="any"{% endif %}>
@@ -136,14 +1227,18 @@
                         </div>
                     </div>
 
+                    <!-- Biomarkers Section -->
                     <div class="form-section">
                         <h3 class="section-title"><i class="fas fa-flask"></i> Biomarkers & Chemistry</h3>
                         <div class="form-grid">
                             {% for feature in features %}
-                                {% if feature.name in ['Urea nitrogen', 'Blood potassium', 'Anion gap', 'Lactic acid'] %}
+                                {% if feature.name in ['NT-proBNP', 'Creatine kinase', 'Creatinine', 'Urea nitrogen', 'glucose', 'Blood potassium', 'Blood sodium', 'Blood calcium', 'Chloride', 'Anion gap', 'Magnesium ion', 'PH', 'Bicarbonate', 'Lactic acid', 'PCO2', 'EF', 'Urine output'] %}
                                 <div class="form-group">
                                     <label>{{ feature.label }} {% if feature.unit %}<span class="unit">({{ feature.unit }})</span>{% endif %}</label>
-                                    <input type="number" name="{{ feature.name }}" id="{{ feature.name }}" value="{{ feature.default }}"
+                                    <input type="number" 
+                                           name="{{ feature.name }}" 
+                                           id="{{ feature.name }}"
+                                           value="{{ feature.default }}"
                                            {% if feature.min is defined %}min="{{ feature.min }}"{% endif %}
                                            {% if feature.max is defined %}max="{{ feature.max }}"{% endif %}
                                            {% if feature.step is defined %}step="{{ feature.step }}"{% else %}step="any"{% endif %}>
@@ -154,33 +1249,59 @@
                     </div>
 
                     <button type="submit" class="submit-btn" id="submitBtn">
-                        <span class="btn-text"><i class="fas fa-search"></i> Analyze Risk</span>
+                        <span class="btn-text"><i class="fas fa-brain"></i> Analyze Risk</span>
+                        <span class="btn-loading-text">Analyzing...</span>
                         <div class="spinner"></div>
                     </button>
                 </form>
             </div>
         </div>
 
+        <!-- Results Panel -->
         <div class="results-panel">
-            <div class="results-card">
+            <div class="results-card glass-card">
                 <div class="results-header">
                     <h2><i class="fas fa-chart-pie"></i> Prediction Results</h2>
                 </div>
                 <div class="results-body">
                     <div class="results-placeholder" id="placeholder">
-                        <i class="fas fa-heartbeat"></i>
-                        <p>Enter patient information and click "Analyze Risk" to see the prediction</p>
+                        <div class="placeholder-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <p>Enter patient information and click<br><strong>"Analyze Risk"</strong> to see the prediction</p>
                     </div>
+
+                    <!-- Analysis Loading -->
+                    <div class="analysis-loader" id="analysisLoader">
+                        <div class="loader-ring"></div>
+                        <ul class="loader-steps">
+                            <li class="loader-step" id="step1">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                                <span>Processing data...</span>
+                            </li>
+                            <li class="loader-step" id="step2">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                                <span>Running model...</span>
+                            </li>
+                            <li class="loader-step" id="step3">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                                <span>Calculating risk...</span>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="result-display" id="resultDisplay">
                         <div class="risk-indicator" id="riskIndicator">
-                            <i class="fas fa-heart"></i>
+                            <div class="risk-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
                             <h3 id="riskLevel">-</h3>
                             <p id="riskMessage">-</p>
                         </div>
                         <div class="probability-bars">
                             <div class="probability-item">
                                 <div class="probability-label">
-                                    <span><i class="fas fa-heart" style="color: #27ae60;"></i> Healthy</span>
+                                    <span><i class="fas fa-heart" style="color: #00b894;"></i> Healthy</span>
                                     <span id="healthyPercent">-</span>
                                 </div>
                                 <div class="probability-bar">
@@ -189,7 +1310,7 @@
                             </div>
                             <div class="probability-item">
                                 <div class="probability-label">
-                                    <span><i class="fas fa-heart-broken" style="color: #e74c3c;"></i> Heart Disease</span>
+                                    <span><i class="fas fa-heart-broken" style="color: #ff4757;"></i> Heart Disease</span>
                                     <span id="diseasePercent">-</span>
                                 </div>
                                 <div class="probability-bar">
@@ -201,55 +1322,238 @@
                 </div>
             </div>
 
-            <div class="info-card">
-                <h3><i class="fas fa-info-circle"></i> About This Model</h3>
+            <div class="info-card glass-card">
+                <h3><i class="fas fa-microchip"></i> Model Architecture</h3>
                 <ul>
-                    <li><i class="fas fa-check"></i> Logistic Regression algorithm</li>
+                    <li><i class="fas fa-check"></i> Logistic Regression classifier</li>
                     <li><i class="fas fa-check"></i> 86.05% test accuracy</li>
-                    <li><i class="fas fa-check"></i> Trained on 1,177 patients</li>
-                    <li><i class="fas fa-check"></i> Uses 9 high-correlation features</li>
+                    <li><i class="fas fa-check"></i> AUC-ROC score ~0.90</li>
+                    <li><i class="fas fa-check"></i> GridSearchCV optimized</li>
                 </ul>
+                <div class="tech-badges">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Scikit-learn</span>
+                    <span class="tech-badge">Flask</span>
+                    <span class="tech-badge">Pandas</span>
+                </div>
             </div>
 
             <div class="disclaimer">
                 <i class="fas fa-exclamation-triangle"></i>
-                <strong>Disclaimer:</strong> This tool is for educational purposes only.
+                <div>
+                    <strong>Disclaimer:</strong> This tool is for educational and demonstration purposes only. It should not be used as a substitute for professional medical advice, diagnosis, or treatment.
+                </div>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
-        <p>🫀 CardioML - Developed by <strong>Zayyan</strong></p>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-heartbeat"></i>
+                CardioML
+            </div>
+            <p>A Machine Learning project demonstrating end-to-end data science workflow for healthcare analytics</p>
+            <p><strong>Developed by Zayyan</strong></p>
+            <div class="footer-links">
+                <a href="https://github.com" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:contact@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
     </footer>
 
     <script>
+        // Page Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 1800);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animated counters
+        const animateCounters = () => {
+            const counters = document.querySelectorAll('[data-count]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+
+                updateCounter();
+            });
+        };
+
+        // Intersection Observer for counters
+        const heroStats = document.querySelector('.hero-stats');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(heroStats);
+
+        // Form submission with animated loading
         document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
             const submitBtn = document.getElementById('submitBtn');
+            const placeholder = document.getElementById('placeholder');
+            const analysisLoader = document.getElementById('analysisLoader');
+            const resultDisplay = document.getElementById('resultDisplay');
+            
+            // Start loading state
             submitBtn.classList.add('loading');
+            placeholder.style.display = 'none';
+            resultDisplay.classList.remove('active');
+            analysisLoader.classList.add('active');
+            
+            // Animate loading steps
+            const steps = ['step1', 'step2', 'step3'];
+            let currentStep = 0;
+            
+            const animateSteps = () => {
+                if (currentStep < steps.length) {
+                    const step = document.getElementById(steps[currentStep]);
+                    step.classList.add('active');
+                    if (currentStep > 0) {
+                        const prevStep = document.getElementById(steps[currentStep - 1]);
+                        prevStep.classList.remove('active');
+                        prevStep.classList.add('completed');
+                        prevStep.querySelector('i').className = 'fas fa-check-circle';
+                    }
+                    currentStep++;
+                }
+            };
+            
+            animateSteps();
+            const stepInterval = setInterval(animateSteps, 600);
+            
             const formData = new FormData(this);
+            
             try {
-                const response = await fetch('/predict', { method: 'POST', body: formData });
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
                 const result = await response.json();
-                if (result.error) { alert('Error: ' + result.error); return; }
-                document.getElementById('placeholder').style.display = 'none';
-                document.getElementById('resultDisplay').classList.add('active');
+                
+                // Complete all steps
+                clearInterval(stepInterval);
+                steps.forEach(stepId => {
+                    const step = document.getElementById(stepId);
+                    step.classList.remove('active');
+                    step.classList.add('completed');
+                    step.querySelector('i').className = 'fas fa-check-circle';
+                });
+                
+                // Delay before showing results for effect
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                if (result.error) {
+                    alert('Error: ' + result.error);
+                    analysisLoader.classList.remove('active');
+                    placeholder.style.display = 'block';
+                    return;
+                }
+                
+                // Hide loader, show results
+                analysisLoader.classList.remove('active');
+                resultDisplay.classList.add('active');
+                
+                // Reset steps for next time
+                steps.forEach(stepId => {
+                    const step = document.getElementById(stepId);
+                    step.classList.remove('active', 'completed');
+                    step.querySelector('i').className = 'fas fa-circle-notch fa-spin';
+                });
+                
+                // Update risk indicator
                 const riskIndicator = document.getElementById('riskIndicator');
+                
                 if (result.prediction === 1) {
                     riskIndicator.className = 'risk-indicator high-risk';
-                    riskIndicator.innerHTML = `<i class="fas fa-heart-broken"></i><h3>High Risk</h3><p>The model indicates elevated risk of heart disease</p>`;
+                    riskIndicator.innerHTML = `
+                        <div class="risk-icon">
+                            <i class="fas fa-heart-broken"></i>
+                        </div>
+                        <h3>High Risk Detected</h3>
+                        <p>The model indicates elevated risk of heart disease</p>
+                    `;
                 } else {
                     riskIndicator.className = 'risk-indicator low-risk';
-                    riskIndicator.innerHTML = `<i class="fas fa-heart"></i><h3>Low Risk</h3><p>The model indicates lower risk of heart disease</p>`;
+                    riskIndicator.innerHTML = `
+                        <div class="risk-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Low Risk Detected</h3>
+                        <p>The model indicates lower risk of heart disease</p>
+                    `;
                 }
+                
+                // Update probability bars with animation
                 document.getElementById('healthyPercent').textContent = result.probability_no_disease + '%';
                 document.getElementById('diseasePercent').textContent = result.probability_disease + '%';
+                
                 setTimeout(() => {
                     document.getElementById('healthyBar').style.width = result.probability_no_disease + '%';
                     document.getElementById('diseaseBar').style.width = result.probability_disease + '%';
                 }, 100);
-            } catch (error) { alert('Error making prediction. Please try again.'); console.error(error); }
-            finally { submitBtn.classList.remove('loading'); }
+                
+            } catch (error) {
+                alert('Error making prediction. Please try again.');
+                console.error(error);
+                analysisLoader.classList.remove('active');
+                placeholder.style.display = 'block';
+            } finally {
+                submitBtn.classList.remove('loading');
+            }
+        });
+
+        // Add smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Input focus animations
+        document.querySelectorAll('.form-group input, .form-group select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
         });
     </script>
 </body>
