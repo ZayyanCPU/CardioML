@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - CardioML</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #e74c3c; --primary-dark: #c0392b; --dark: #2c3e50; --light: #ecf0f1; --gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); --shadow: 0 10px 40px rgba(0, 0, 0, 0.1); --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15); }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: var(--dark); }
+        .navbar { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: var(--shadow); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .logo i { font-size: 2rem; animation: heartbeat 1.5s infinite; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .hero { padding: 8rem 2rem 3rem; text-align: center; color: white; }
+        .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .content { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .card { background: white; border-radius: 20px; box-shadow: var(--shadow-lg); padding: 2rem; margin-bottom: 2rem; }
+        .card h2 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .card p { line-height: 1.8; color: #555; margin-bottom: 1rem; }
+        .card ul { margin-left: 1.5rem; color: #555; }
+        .card li { margin: 0.5rem 0; }
+        .footer { text-align: center; padding: 2rem; color: rgba(255,255,255,0.8); }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo"><i class="fas fa-heartbeat"></i> CardioML</a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1><i class="fas fa-info-circle"></i> About CardioML</h1>
+        <p>Learn more about our heart disease prediction model</p>
+    </section>
+
+    <main class="content">
+        <div class="card">
+            <h2><i class="fas fa-heartbeat"></i> What is CardioML?</h2>
+            <p>CardioML is a machine learning-powered web application designed to predict the risk of heart disease based on patient biomarkers and vital signs. The model uses Logistic Regression trained on clinical data to provide risk assessments.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-chart-line"></i> Model Performance</h2>
+            <ul>
+                <li><strong>Algorithm:</strong> Logistic Regression</li>
+                <li><strong>Test Accuracy:</strong> 86.05%</li>
+                <li><strong>Training Data:</strong> 1,177 patients</li>
+                <li><strong>Features Used:</strong> 9 high-correlation biomarkers</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-vial"></i> Features Used</h2>
+            <p>The model uses these 9 key indicators:</p>
+            <ul>
+                <li>Heart Rate (bpm)</li>
+                <li>RDW - Red Cell Distribution Width (%)</li>
+                <li>Leucocyte Count (K/µL)</li>
+                <li>PT - Prothrombin Time (s)</li>
+                <li>INR - International Normalized Ratio</li>
+                <li>Urea Nitrogen (mg/dL)</li>
+                <li>Blood Potassium (mEq/L)</li>
+                <li>Anion Gap (mEq/L)</li>
+                <li>Lactic Acid (mmol/L)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-user"></i> Developer</h2>
+            <p>CardioML was developed by <strong>Zayyan</strong> as a machine learning project for heart disease risk prediction.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Disclaimer</h2>
+            <p>This tool is for <strong>educational purposes only</strong> and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare provider for medical concerns.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>🫀 CardioML - Developed by <strong>Zayyan</strong></p>
+    </footer>
+</body>
+</html>

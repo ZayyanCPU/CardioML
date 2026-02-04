@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - CardioML</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 3rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-card p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: rgba(255,255,255,0.8);
+            margin: 0;
+        }
+
+        .model-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .model-comparison th,
+        .model-comparison td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .model-comparison th {
+            background: var(--light);
+            font-weight: 600;
+        }
+
+        .model-comparison tr:hover {
+            background: #f8f9fa;
+        }
+
+        .model-comparison .best {
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .model-comparison .best td {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-badge {
+            background: var(--light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .tech-badge i {
+            color: var(--primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                CardioML
+            </a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1><i class="fas fa-info-circle"></i> About CardioML</h1>
+        <p>A machine learning project for heart disease prediction</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-card">
+            <h2><i class="fas fa-bullseye"></i> Project Overview</h2>
+            <p>
+                <strong>CardioML</strong> is a machine learning project focused on predicting heart disease outcomes 
+                using clinical and laboratory parameters. This project demonstrates a complete data science workflow 
+                from exploratory data analysis through model deployment, comparing multiple classification algorithms 
+                to identify the optimal predictive model.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3>1,177</h3>
+                    <p>Patients</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>86.05%</h3>
+                    <p>Test Accuracy</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-database"></i>
+                    <h3>51</h3>
+                    <p>Clinical Features</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>6</h3>
+                    <p>Models Compared</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2><i class="fas fa-flask"></i> Model Comparison</h2>
+            <p>
+                Six different classification algorithms were trained and evaluated to find the best 
+                performing model for heart disease prediction:
+            </p>
+            
+            <table class="model-comparison">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Test Accuracy</th>
+                        <th>AUC Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best">
+                        <td><i class="fas fa-trophy"></i> Logistic Regression</td>
+                        <td>86.05%</td>
+                        <td>~0.90</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>~84%</td>
+                        <td>~0.88</td>
+                    </tr>
+                    <tr>
+                        <td>Support Vector Machine</td>
+                        <td>~83%</td>
+                        <td>~0.87</td>
+                    </tr>
+                    <tr>
+                        <td>K-Nearest Neighbors</td>
+                        <td>~81%</td>
+                        <td>~0.85</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td>~79%</td>
+                        <td>~0.82</td>
+                    </tr>
+                    <tr>
+                        <td>Naive Bayes</td>
+                        <td>~78%</td>
+                        <td>~0.81</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-card">
+            <h2><i class="fas fa-cogs"></i> Methodology</h2>
+            <p>
+                The project follows a rigorous machine learning pipeline:
+            </p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Data Preprocessing:</strong> Handling missing values with SimpleImputer</li>
+                <li><strong>Feature Selection:</strong> Using correlation analysis (threshold > 0.129)</li>
+                <li><strong>Feature Scaling:</strong> StandardScaler normalization</li>
+                <li><strong>Model Training:</strong> 60-20-20 train-validation-test split</li>
+                <li><strong>Hyperparameter Tuning:</strong> GridSearchCV with 5-fold cross-validation</li>
+                <li><strong>Evaluation:</strong> Accuracy, AUC-ROC metrics</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2><i class="fas fa-code"></i> Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-badge"><i class="fab fa-python"></i> Python</div>
+                <div class="tech-badge"><i class="fas fa-table"></i> Pandas</div>
+                <div class="tech-badge"><i class="fas fa-calculator"></i> NumPy</div>
+                <div class="tech-badge"><i class="fas fa-brain"></i> Scikit-learn</div>
+                <div class="tech-badge"><i class="fas fa-chart-bar"></i> Matplotlib</div>
+                <div class="tech-badge"><i class="fas fa-chart-area"></i> Seaborn</div>
+                <div class="tech-badge"><i class="fas fa-server"></i> Flask</div>
+                <div class="tech-badge"><i class="fab fa-html5"></i> HTML/CSS/JS</div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2><i class="fas fa-user"></i> Developer</h2>
+            <p>
+                This project was developed by <strong>Zayyan</strong> as a Machine Learning Lab Project, 
+                demonstrating practical application of data science techniques for healthcare analytics.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>🫀 CardioML - Developed by <strong>Zayyan</strong></p>
+        <p>Powered by Machine Learning</p>
+    </footer>
+</body>
+</html>
